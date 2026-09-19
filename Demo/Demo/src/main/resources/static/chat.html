@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <title>SpringAI本地对话</title>
+    <style>
+        .container{width:800px;margin:30px auto;}
+        #chatArea{border:1px solid #ccc;height:450px;padding:10px;overflow-y:auto;margin-bottom:10px;}
+        .msg-user{text-align:right;margin:8px 0;}
+        .msg-ai{text-align:left;margin:8px 0;}
+        .user{background:#007bff;color:white;padding:6px 12px;border-radius:10px;display:inline-block;max-width:70%;}
+        .ai{background:#eee;padding:6px 12px;border-radius:10px;display:inline-block;max-width:70%;}
+        textarea{width:720px;height:80px;padding:8px;}
+        button{height:86px;width:70px;font-size:16px;cursor:pointer;}
+    </style>
+</head>
+<body>
+<div class="container">
+    <div style="margin-bottom: 10px;">
+        <button onclick="goBack()" style="width: auto; height: 32px; padding: 0 16px; cursor: pointer;">
+            ← Back
+        </button>
+    </div>
+
+    <div id="chatArea"></div>
+    <textarea id="inputMsg" placeholder="在这里输入你的问题..."></textarea>
+    <button onclick="sendMsg()">发送</button>
+</div>
+<script>
+    function goBack() {
+        window.location.href = 'http://localhost:8080/student-manager';
+    }
+
+
+    async function sendMsg(){
+        const question = document.getElementById("inputMsg").value.trim();
+        if(!question) return;
+        const chatArea = document.getElementById("chatArea");
+        chatArea.innerHTML += `<div class="msg-user"><span class="user">${question}</span></div>`;
+        document.getElementById("inputMsg").value = "";
+        try{
+            const resp = await fetch("/api/chat",{
+                method:"POST",
+                headers:{"Content-Type":"application/json"},
+                body: JSON.stringify({question:question})
+            })
+            const answer = await resp.text();
+            chatArea.innerHTML += `<div class="msg-ai"><span class="ai">${answer}</span></div>`;
+            chatArea.scrollTop = chatArea.scrollHeight;
+        }catch(err){
+            chatArea.innerHTML += `<div class="msg-ai"><span class="ai">请求出错，请检查Ollama是否启动</span></div>`
+        }
+    }
+</script>
+</body>
+</html>

@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.example.demo.mapper.StudentMapper">
+
+    <select id="findAll" resultType="org.example.demo.model.Student">
+        SELECT * FROM student
+    </select>
+
+    <select id="findById" parameterType="Long" resultType="org.example.demo.model.Student">
+        SELECT * FROM student WHERE id = #{id}
+    </select>
+
+    <insert id="insert" parameterType="org.example.demo.model.Student">
+        INSERT INTO student (name, age, major, classp, enrol)
+        VALUES (#{name}, #{age}, #{major}, #{classp}, #{enrol})
+    </insert>
+
+    <select id="findByName" parameterType="String" resultType="org.example.demo.model.Student">
+        SELECT * FROM student WHERE name LIKE CONCAT('%', #{name}, '%')
+    </select>
+
+    <delete id="delstu">
+        DELETE FROM student WHERE id = #{id}
+    </delete>
+
+    <update id="updatestu">
+        UPDATE student SET name=#{name}, age=#{age}, major=#{major},
+                           classp=#{classp}, enrol=#{enrol}
+        WHERE id = #{id}
+    </update>
+
+    <select id="getMajorStudentCount" resultType="org.example.demo.model.MajorCountVO">
+        SELECT COUNT(*) as value, a.major name FROM student a GROUP BY a.major
+    </select>
+
+    <select id="getScoreStudentCount" resultType="org.example.demo.model.ScoreCountVO">
+        SELECT c.class_id, c.class_name as name, cs.total_score as total_score, cs.avg_score as avg_score
+        FROM classPro c INNER JOIN class_score cs ON c.class_id = cs.class_id
+    </select>
+</mapper>
