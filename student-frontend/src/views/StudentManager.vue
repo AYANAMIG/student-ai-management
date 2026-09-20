@@ -1,14 +1,5 @@
 <template>
   <div class="container">
-    <el-page-header content="学生信息管理系统" @back="handleBack">
-      <template #extra>
-        <el-button type="danger" @click="handleLogout">退出登录</el-button>
-        <el-button type="danger" @click="handleCount">课程统计</el-button>
-        <el-button type="danger" @click="handleScoreCount">成绩分布统计</el-button>
-        <el-button type="primary" @click="handleAI">AI 对话</el-button>
-      </template>
-    </el-page-header>
-
     <el-card class="form-card">
       <el-form :model="student" label-width="80px" @submit.prevent="handleAdd">
         <el-row :gutter="20">
@@ -80,10 +71,12 @@
         <el-table-column prop="major" label="专业" />
         <el-table-column prop="enrol" label="入学日期" />
         <el-table-column prop="classp" label="所属班级" />
-        <el-table-column label="操作">
+        <el-table-column label="操作" min-width="160" align="center">
           <template #default="scope">
-            <el-button type="primary" @click="handleEdit(scope.row)" style="margin-right: 10px;">编辑</el-button>
-            <el-button type="danger" @click="handleDelete(scope.row.id)">删除</el-button>
+            <div style="display:flex; gap:8px; justify-content:center;">
+              <el-button type="primary" @click="handleEdit(scope.row)">编辑</el-button>
+              <el-button type="danger" @click="handleDelete(scope.row.id)">删除</el-button>
+            </div>
           </template>
         </el-table-column>
       </el-table>
@@ -132,11 +125,9 @@
 
 <script setup>
 import { ref, onMounted } from 'vue';
-import { useRouter } from 'vue-router';
 import request from '@/utils/request';
 import { ElMessage, ElMessageBox } from 'element-plus';
 
-const router = useRouter();
 const students = ref([]);
 const searchName = ref('');
 const student = ref({ name: '', age: '', major: '', classp: '', enrol: '' });
@@ -210,29 +201,6 @@ const handleUpdate = async () => {
   } catch (err) {
     ElMessage.error('修改失败');
   }
-};
-
-const handleCount = () => {
-  router.push('/Charts-manager');
-};
-
-const handleScoreCount = () => {
-  router.push('/Score-manager');
-};
-
-const handleLogout = () => {
-  localStorage.removeItem('isLogin');
-  ElMessage.success('已退出登录');
-  router.push('/LoginView');
-};
-
-const handleAI = () => {
-  window.open('http://localhost:8081/chat.html', '_blank');
-};
-
-const handleBack = () => {
-  localStorage.removeItem('isLogin');
-  window.location.href = 'http://localhost:8080/LoginView';
 };
 
 onMounted(() => {

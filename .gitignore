@@ -1,0 +1,45 @@
+# ===== Java / Maven =====
+target/
+*.class
+*.jar
+*.war
+*.log
+!.mvn/wrapper/maven-wrapper.jar
+
+# ===== IDEA =====
+.idea/
+*.iml
+*.iws
+*.ipr
+
+# ===== Eclipse / VS Code =====
+.settings/
+.project
+.classpath
+.vscode/
+
+# ===== Node / Vue =====
+node_modules/
+dist/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+.npm
+
+# ===== 系统文件 =====
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# ===== 压缩包 =====
+*.zip
+*.rar
+*.7z
+
+# ===== 软件安装目录（项目里多余的）=====
+Intellij IDEA 2026.2.3/
+jdk-21.0.12.1/
+MySQL/
+nodejs/
+npm-global/
+软件包/
